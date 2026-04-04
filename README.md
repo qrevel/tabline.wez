@@ -38,7 +38,7 @@ Some more examples, but very zoomed in.
 ### WezTerm Plugin API
 
 ```lua
-local tabline = wezterm.plugin.require("https://github.com/michaelbrusegard/tabline.wez")
+local tabline = wezterm.plugin.require("https://github.com/qrevel/tabline.wez")
 ```
 
 You'll also need to have a patched font if you want icons.
@@ -120,7 +120,7 @@ tabline.apply_to_config(config)
 ```
 
 > [!CAUTION]
-> This function has nothing to do with the tabline config passed into setup and retrieved with `tabline.get_config()`. It only applies some recommended options to the WezTerm config. More info [here](https://github.com/michaelbrusegard/tabline.wez/discussions/3)
+> This function has nothing to do with the tabline config passed into setup and retrieved with `tabline.get_config()`. It only applies some recommended options to the WezTerm config. More info [here](https://github.com/qrevel/tabline.wez/discussions/3)
 
 ---
 

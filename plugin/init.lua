@@ -23,10 +23,10 @@ function plugin_package_path()
   }
 
   local components = {
-    string.format("https://github.com/michaelbrusegard/%s", basename),
-    string.format("https://github.com/michaelbrusegard/%s/", basename),
-    string.format("http://github.com/michaelbrusegard/%s", basename),
-    string.format("http://github.com/michaelbrusegard/%s/", basename),
+    string.format("https://github.com/qrevel/%s", basename),
+    string.format("https://github.com/qrevel/%s/", basename),
+    string.format("http://github.com/qrevel/%s", basename),
+    string.format("http://github.com/qrevel/%s/", basename),
     basename,
   }
 
