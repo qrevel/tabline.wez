@@ -11,12 +11,23 @@ local active_attributes, inactive_attributes, active_separator_attributes, inact
   {}, {}, {}, {}
 local tab_active, tab_inactive = {}, {}
 
-local function create_attributes(hover)
+local function create_attributes(tab, hover)
   local colors = config.theme.tab
   for _, ext in pairs(extension.extensions) do
     if ext.theme and ext.theme.tab then
       colors = util.deep_extend(util.deep_copy(colors), ext.theme.tab)
     end
+  end
+  local inactive_fg = hover and colors.inactive_hover.fg or colors.inactive.fg
+  local has_unseen_output = false
+  for _, pane in ipairs(tab.panes or {}) do
+    if pane.has_unseen_output then
+      has_unseen_output = true
+      break
+    end
+  end
+  if has_unseen_output then
+    inactive_fg = config.theme.colors.ansi[3]
   end
   active_attributes = {
     { Foreground = { Color = colors.active.fg } },
@@ -24,7 +35,7 @@ local function create_attributes(hover)
     { Attribute = { Intensity = 'Bold' } },
   }
   inactive_attributes = {
-    { Foreground = { Color = hover and colors.inactive_hover.fg or colors.inactive.fg } },
+    { Foreground = { Color = inactive_fg } },
     { Background = { Color = hover and colors.inactive_hover.bg or colors.inactive.bg } },
   }
   active_separator_attributes = {
@@ -73,7 +84,7 @@ M.set_title = function(tab, hover)
   if not config.opts.options.tabs_enabled then
     return
   end
-  create_attributes(hover)
+  create_attributes(tab, hover)
   create_tab_content(tab)
   local parts = tabs(tab)
   parts_by_tab_id[tab.tab_id] = parts
