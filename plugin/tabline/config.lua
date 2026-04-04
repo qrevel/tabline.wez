@@ -6,6 +6,7 @@ local M = {}
 local default_opts = {
   options = {
     theme = 'Catppuccin Mocha',
+    sync_background = true,
     tabs_enabled = true,
     section_separators = {
       left = wezterm.nerdfonts.pl_left_hard_divider,
@@ -97,6 +98,24 @@ local function set_component_opts(user_opts)
   return component_opts
 end
 
+local function sync_background(theme)
+  local background = theme.colors.background
+
+  theme.tab.active.bg = background
+  theme.tab.inactive.bg = background
+  theme.tab.inactive_hover.bg = background
+
+  for name, mode in pairs(theme) do
+    if type(mode) == 'table' and name:match('_mode$') then
+      for _, key in ipairs({ 'a', 'b', 'c', 'x', 'y', 'z' }) do
+        if mode[key] then
+          mode[key].bg = background
+        end
+      end
+    end
+  end
+end
+
 function M.set(user_opts)
   user_opts = user_opts or { options = {} }
   user_opts.options = user_opts.options or {}
@@ -117,6 +136,10 @@ function M.set_theme(theme, overrides)
     M.theme = util.deep_extend(M.theme or {}, theme)
   else
     M.theme = util.deep_extend(get_colors(theme), overrides or {})
+  end
+
+  if M.opts.options.sync_background then
+    sync_background(M.theme)
   end
 end
 

@@ -94,6 +94,15 @@ function M.setup(opts)
   require('tabline.config').set(opts)
 
   wezterm.on('update-status', function(window)
+    local config = require('tabline.config')
+    config.set_theme(window:effective_config().color_scheme)
+    if config.opts.options.sync_background then
+      local overrides = window:get_config_overrides() or {}
+      overrides.colors = overrides.colors or {}
+      overrides.colors.tab_bar = overrides.colors.tab_bar or {}
+      overrides.colors.tab_bar.background = config.theme.colors.background
+      window:set_config_overrides(overrides)
+    end
     require('tabline.component').set_status(window)
   end)
 
