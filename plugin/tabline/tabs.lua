@@ -21,6 +21,7 @@ local function create_attributes(hover)
   active_attributes = {
     { Foreground = { Color = colors.active.fg } },
     { Background = { Color = colors.active.bg } },
+    { Attribute = { Intensity = 'Bold' } },
   }
   inactive_attributes = {
     { Foreground = { Color = hover and colors.inactive_hover.fg or colors.inactive.fg } },
