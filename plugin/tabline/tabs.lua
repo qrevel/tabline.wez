@@ -3,6 +3,7 @@ local util = require('tabline.util')
 local extension = require('tabline.extension')
 
 local M = {}
+local parts_by_tab_id = {}
 
 local left_tab_separator = { Text = config.opts.options.tab_separators.left or config.opts.options.tab_separators }
 local right_tab_separator = { Text = config.opts.options.tab_separators.right or config.opts.options.tab_separators }
@@ -73,7 +74,13 @@ M.set_title = function(tab, hover)
   end
   create_attributes(hover)
   create_tab_content(tab)
-  return tabs(tab)
+  local parts = tabs(tab)
+  parts_by_tab_id[tab.tab_id] = parts
+  return parts
+end
+
+function M.get_parts(tab_id)
+  return parts_by_tab_id[tab_id]
 end
 
 return M

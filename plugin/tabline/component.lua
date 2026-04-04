@@ -3,6 +3,7 @@ local util = require('tabline.util')
 local config = require('tabline.config')
 local extension = require('tabline.extension')
 local mode = require('tabline.components.window.mode')
+local tabs = require('tabline.tabs')
 
 local M = {}
 
@@ -168,11 +169,38 @@ local function left_section()
   return result
 end
 
+local function text_width(parts)
+  local width = 0
+  for _, part in ipairs(parts or {}) do
+    width = width + wezterm.column_width(part.Text or '')
+  end
+  return width
+end
+
+local function tabs_width(window)
+  local width = 0
+
+  for _, tab in ipairs(window:mux_window():tabs()) do
+    width = width + text_width(tabs.get_parts(tab:tab_id()))
+  end
+
+  return width
+end
+
 function M.set_status(window)
   create_attributes(window)
   create_sections(window)
-  window:set_left_status(wezterm.format(left_section()))
-  window:set_right_status(wezterm.format(right_section()))
+  local left = left_section()
+  local right = right_section()
+
+  if config.opts.options.center_tabs then
+    local cols = window:active_tab():get_size().cols
+    local cap = math.max(0, cols - text_width(left) - text_width(right) - tabs_width(window))
+    table.insert(left, { Text = string.rep(' ', math.floor(cap / 2)) })
+  end
+
+  window:set_left_status(wezterm.format(left))
+  window:set_right_status(wezterm.format(right))
 end
 
 return M

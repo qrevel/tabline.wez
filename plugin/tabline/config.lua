@@ -19,6 +19,7 @@ local default_opts = {
       left = wezterm.nerdfonts.pl_left_hard_divider,
       right = wezterm.nerdfonts.pl_right_hard_divider,
     },
+    center_tabs = true,
   },
   sections = {
     tabline_a = { 'mode' },
