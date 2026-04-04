@@ -18,19 +18,24 @@ local function create_attributes(tab, hover)
       colors = util.deep_extend(util.deep_copy(colors), ext.theme.tab)
     end
   end
+  local active_fg = colors.active.fg
   local inactive_fg = hover and colors.inactive_hover.fg or colors.inactive.fg
   local has_unseen_output = false
+  local is_zoomed = tab.active_pane and tab.active_pane.is_zoomed
   for _, pane in ipairs(tab.panes or {}) do
     if pane.has_unseen_output then
       has_unseen_output = true
       break
     end
   end
-  if has_unseen_output then
+  if is_zoomed then
+    active_fg = config.theme.colors.ansi[2]
+    inactive_fg = config.theme.colors.ansi[2]
+  elseif has_unseen_output then
     inactive_fg = config.theme.colors.ansi[3]
   end
   active_attributes = {
-    { Foreground = { Color = colors.active.fg } },
+    { Foreground = { Color = active_fg } },
     { Background = { Color = colors.active.bg } },
     { Attribute = { Intensity = 'Bold' } },
   }
